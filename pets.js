@@ -15,7 +15,7 @@ let petData = [
 		age: 'adult',
 		size: 'M',
 		gender: 'Female',
-		details: ['Other cats ok', 'No dogs'],
+		details: ['No dogs'],
 		photo: 'images/Lucy.jpg',
 	},
 	{
@@ -110,7 +110,12 @@ function getCats() {
             
             <strong>Other Details:</strong>
             <ul>
-                    <li>${details.join('; ')}</li>
+                ${details
+									.map(detail => {
+										if (!detail.length) return `<li>No additional details...</li>`
+										return `<li>${detail}</li>`
+									})
+									.join('')}
             </ul>`
 		})
 		.join(' ')
@@ -118,6 +123,7 @@ function getCats() {
 
 // Create a list of breeds and how many of each breed there are
 function getSummary() {
+	return petData.reduce(() => {})
 	// Template:
 	{
 		/* <h2>Available Breeds</h2>
