@@ -91,3 +91,45 @@ let petData = [
 		photo: 'images/Simba.jpg',
 	},
 ]
+
+// Create a list of cats for adoption
+function getCats() {
+	return petData
+		.map(cat => {
+			let { name, breeds, age, size, gender, details, photo } = cat
+			return `
+            <h2>${name}</h2>
+            <p><img alt="A photo of ${name}" src=${photo}></p>
+            
+            <p>
+                    Age: ${age}<br>
+                    Size: ${size}<br>
+                    Gender: ${gender}<br>
+                    Breeds: ${breeds.join(', ')}
+            </p>
+            
+            <strong>Other Details:</strong>
+            <ul>
+                    <li>${details.join('; ')}</li>
+            </ul>`
+		})
+		.join(' ')
+}
+
+// Create a list of breeds and how many of each breed there are
+function getSummary() {
+	// Template:
+	{
+		/* <h2>Available Breeds</h2>
+    <ul>
+         <li>{Breed Name} ({Breed Quantity})</li>
+         <li>Ex. Lab (2)</li>
+    </ul> */
+	}
+
+	return ''
+}
+
+// Load the list of cats to DOM
+let catList = document.querySelector('#cats')
+catList.innerHTML = getSummary() + getCats()
