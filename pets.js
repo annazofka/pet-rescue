@@ -91,51 +91,74 @@ let petData = [
 		photo: 'images/Simba.jpg',
 	},
 ]
+// Create a list of available breeds and how many of each breed there are
 
-// Create a list of cats for adoption
-function getCats() {
-	return petData
-		.map(cat => {
-			let { name, breeds, age, size, gender, details, photo } = cat
-			return `
-            <h2>${name}</h2>
-            <p><img alt="A photo of ${name}" src=${photo}></p>
-            
-            <p>
-                    Age: ${age}<br>
-                    Size: ${size}<br>
-                    Gender: ${gender}<br>
-                    Breeds: ${breeds.join(', ')}
-            </p>
-            
-            <strong>Other Details:</strong>
-            <ul>
-                ${details
-									.map(detail => {
-										if (!detail.length) return `<li>No additional details...</li>`
-										return `<li>${detail}</li>`
-									})
-									.join('')}
-            </ul>`
+let getSummary = function () {
+	//Get breeds
+	let breeds = petData.reduce(function (breeds, cat) {
+		// return breeds to next loop
+
+		cat.breeds.forEach(function (breed) {
+			// If breed already exists, increase count
+			// Otherwise create it
+			if (breeds[breed]) {
+				breeds[breed] = breeds[breed] + 1
+			} else {
+				breeds[breed] = 1
+			}
 		})
-		.join(' ')
-}
 
-// Create a list of breeds and how many of each breed there are
-function getSummary() {
-	return petData.reduce(() => {})
-	// Template:
-	{
-		/* <h2>Available Breeds</h2>
-    <ul>
-         <li>{Breed Name} ({Breed Quantity})</li>
-         <li>Ex. Lab (2)</li>
-    </ul> */
+		return breeds
+	}, {})
+
+	// Create summary markup
+	let summary = ''
+	for (let breed in breeds) {
+		summary += `<li>${breed} (${breeds[breed]})</li>`
 	}
 
-	return ''
+	// Return the markup
+	return `
+     <h2>Available Breeds</h2>
+     <ul>
+         ${summary}
+     </ul>`
 }
 
-// Load the list of cats to DOM
+// Create a list of adaptable cats
+let getCats = function () {
+	return petData
+		.map(function (cat) {
+			let { name, photo, age, size, gender, breeds, details } = cat
+
+			return `
+        <h2>${name}</h2>
+        <p>
+        <img src="${photo}" alt="A photo of ${name}"></p>
+    
+        <p>
+            Age: ${age} <br>
+            Size: ${size} <br>
+            Gender: ${gender} <br>
+            Breeds: ${breeds.join(', ')}
+        </p>
+    
+        <strong>Other details:</strong>
+        <ul>
+            ${details
+							.map(function (detail) {
+								if (!detail.length)
+									return `<li>
+                                <em>No additional details ...</em>
+                                </li>`
+								return `<li>${detail}</li>`
+							})
+							.join('')}
+        </ul>`
+		})
+		.join('')
+}
+
+// Load list of adaptable cats into the DOM
 let catList = document.querySelector('#cats')
 catList.innerHTML = getSummary() + getCats()
